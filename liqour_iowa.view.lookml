@@ -2,17 +2,17 @@
   derived_table:
     sql: |
       SELECT * 
-        FROM [fh-bigquery:liquor.iowa] 
-      LIMIT 10
+        FROM [fh-bigquery:liquor.iowa]
 
   fields:
   - measure: count
     type: count
     drill_fields: detail*
 
-  - dimension: date
-    type: string
-    sql: ${TABLE}.date
+  - dimension_group: date
+    type: time
+    timeframes: [date, week, month, year]
+    sql: timestamp(${TABLE}.date)
 
   - dimension_group: convenience_store
     type: time
@@ -97,6 +97,18 @@
 
   - dimension: total
     type: number
+    sql: ${TABLE}.total
+    
+  - measure: sum_total
+    type: sum
+    sql: ${TABLE}.total
+    
+  - measure: sum_bottle_qty
+    type: sum
+    sql: ${TABLE}.total
+
+  - measure: sum_bottle_price
+    type: sum
     sql: ${TABLE}.total
 
   sets:
